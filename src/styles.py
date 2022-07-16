@@ -16,13 +16,15 @@ def streamlit_theme():
     sm_font = base_size * 0.8  # st.table size
     xl_font = base_size * 1.75  # noqa
 
-    config = {
+    return {
         "config": {
             "arc": {"fill": primary_color},
             "area": {"fill": primary_color},
-            "circle": {"fill": primary_color,
-                       "stroke": font_color,
-                       "strokeWidth": 0.5},
+            "circle": {
+                "fill": primary_color,
+                "stroke": font_color,
+                "strokeWidth": 0.5,
+            },
             "line": {"stroke": primary_color},
             "path": {"stroke": primary_color},
             "point": {"stroke": primary_color},
@@ -61,7 +63,13 @@ def streamlit_theme():
                 "labelFontSize": sm_font,
             },
             "range": {
-                "category": ["#f63366", "#fffd80", "#0068c9", "#ff2b2b", "#09ab3b"],
+                "category": [
+                    "#f63366",
+                    "#fffd80",
+                    "#0068c9",
+                    "#ff2b2b",
+                    "#09ab3b",
+                ],
                 "diverging": [
                     "#850018",
                     "#cd1549",
@@ -109,7 +117,6 @@ def streamlit_theme():
             },
         }
     }
-    return config
 
 
 def ggplot2_theme():
@@ -122,14 +129,16 @@ def ggplot2_theme():
     sm_font = base_size * 0.8  # st.table size
     xl_font = base_size * 1.75  # noqa
 
-    config = {
+    return {
         "config": {
             "view": {"fill": grey_color},
             "arc": {"fill": primary_color},
             "area": {"fill": primary_color},
-            "circle": {"fill": primary_color,
-                       "stroke": font_color,
-                       "strokeWidth": 0.5},
+            "circle": {
+                "fill": primary_color,
+                "stroke": font_color,
+                "strokeWidth": 0.5,
+            },
             "line": {"stroke": primary_color},
             "path": {"stroke": primary_color},
             "point": {"stroke": primary_color},
@@ -171,7 +180,13 @@ def ggplot2_theme():
                 "labelFontSize": sm_font,
             },
             "range": {
-                "category": ["#f63366", "#fffd80", "#0068c9", "#ff2b2b", "#09ab3b"],
+                "category": [
+                    "#f63366",
+                    "#fffd80",
+                    "#0068c9",
+                    "#ff2b2b",
+                    "#09ab3b",
+                ],
                 "diverging": [
                     "#850018",
                     "#cd1549",
@@ -219,8 +234,6 @@ def ggplot2_theme():
             },
         }
     }
-    return config
 
 
-if __name__ == "__main__":
-    pass
+pass

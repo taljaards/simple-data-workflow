@@ -134,15 +134,7 @@ def fake_regression_data():
     x4 = np.random.poisson(lam=10, size=N)
     y = x1 + x2 + x3 + x4 + np.random.normal(size=N)
 
-    data = pd.DataFrame({
-        'x1': x1,
-        'x2': x2,
-        'x3': x3,
-        'x4': x4,
-        'y': y
-    })
-
-    return data
+    return pd.DataFrame({'x1': x1, 'x2': x2, 'x3': x3, 'x4': x4, 'y': y})
 
 
 # UNIT TESTS
@@ -207,7 +199,7 @@ def test_factor_wrangler_ordered(data_examples):
                               dummy_to_bool=False)
     year_result_cat = result.loc[:, 'year'].cat
     cba_result_cat = result.loc[:, 'cba'].cat
-    year_expected = pd.Index([i for i in range(1940, 1950)])
+    year_expected = pd.Index(list(range(1940, 1950)))
     cba_expected = pd.Index(['A', 'B', 'C', 'D', 'E'])
     # Assertions
     assert_index_equal(year_result_cat.categories, year_expected)

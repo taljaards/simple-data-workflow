@@ -43,8 +43,7 @@ def clean_text(text: str):
     2. Any excess whitespace in between are replaced with an underscore "_"
     3. All characters are lowercased
     """
-    clean_text = re.sub(' +', '_', text.strip()).lower()
-    return clean_text
+    return re.sub(' +', '_', text.strip()).lower()
 
 
 @task
@@ -216,7 +215,7 @@ def _factor_wrangler(
     # Set categories
     if categories:
         # Clean col names
-        categories = {k: v for k, v in categories.items()}
+        categories = dict(categories.items())
         for col, cats in categories.items():
             data.loc[:, col] = (data.loc[:, col]
                                     .cat
@@ -224,7 +223,7 @@ def _factor_wrangler(
     # Set is_ordered
     if ordered_cols:
         # Clean col names
-        ordered_cols = [col for col in ordered_cols]
+        ordered_cols = list(ordered_cols)
         for col in ordered_cols:
             data.loc[:, col] = (data.loc[:, col]
                                     .cat
@@ -383,20 +382,21 @@ def wrangle_na(data: pd.DataFrame,
         data = data.dropna(**kwargs)
 
     # If fill-in with indicators or grand model
-    if strategy in ['fii', 'gm']:
+    if strategy in {'fii', 'gm'}:
         # Create indicator columns for patterns of na
         na_indicators = (
             data.applymap(lambda x: '1' if pd.isna(x) else '0')
-                .agg(''.join, axis=1)
-                .pipe(pd.get_dummies)
-                .add_prefix('na_')
-                .drop('na_{}'.format('0'*len(data.columns)), axis=1)
-                .astype('boolean')
+            .agg(''.join, axis=1)
+            .pipe(pd.get_dummies)
+            .add_prefix('na_')
+            .drop(f"na_{'0' * len(data.columns)}", axis=1)
+            .astype('boolean')
         )
+
         data = data.join(na_indicators)
 
     # If fill-in (or related)
-    if strategy in ['fi',  'fii', 'gm']:
+    if strategy in {'fi', 'fii', 'gm'}:
         # Imputation (floats)
         float_cols = data.select_dtypes(include=['float']).columns
         if any(float_cols):
@@ -440,8 +440,7 @@ def wrangle_na(data: pd.DataFrame,
                                return_type='dataframe')
         data = data.join(interactions)
 
-    # If MICE
-    if strategy == 'mice':
+    elif strategy == 'mice':
         # Label encode columns
         column_codes = pd.Categorical(data.columns)
         # Dictionary codes label
@@ -576,8 +575,7 @@ def run_model(data: pd.DataFrame,
     X_with_dummies = [col for col in data.columns if col != y and
                       any(x in col for x in X)]
     mod = sm.OLS(data[y], data[X_with_dummies])
-    res = mod.fit()
-    return res
+    return mod.fit()
 
 
 # Post-processing
@@ -598,15 +596,12 @@ def plot_confidence_intervals(res: RegressionResultsWrapper) -> alt.Chart:
     conf_int = (conf_int.reset_index()
                         .rename(columns={'level_0': 'regressor',
                                          'level_1': 'interval'}))
-    chart = alt.Chart(conf_int).mark_boxplot().encode(
-        x='regressor:O',
-        y='estimate:Q'
-    ).properties(
-        width=200,
-        height=500
+    return (
+        alt.Chart(conf_int)
+        .mark_boxplot()
+        .encode(x='regressor:O', y='estimate:Q')
+        .properties(width=200, height=500)
     )
-    return chart
 
 
-if __name__ == "__main__":
-    pass
+pass
