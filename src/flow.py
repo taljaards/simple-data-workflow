@@ -2,6 +2,7 @@
 from proprocessing, to modelling, and lastly post-processing.
 """
 
+
 from prefect import Flow
 from prefect import Parameter
 
@@ -50,7 +51,3 @@ with Flow(name='e2e-pipeline') as e2e_pipeline:
 
     # Postprocessing
     conf_int_chart = plot_confidence_intervals(res)
-
-
-if __name__ == "__main__":
-    pass
